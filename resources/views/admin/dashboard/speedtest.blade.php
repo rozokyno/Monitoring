@@ -17,35 +17,60 @@
             @include('partials.topbar')
             <!-- End of Topbar -->
 
-<div class="container-fluid">
-    <div class="card sadhow " >
-    <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">
-                Speedtest
-                </h6>
-              </div>
-        <div class="card-body text-center">
-            <button class="btn center btn-primary rounded-circle" style="width: 300px; height: 300px; font-size: 24px; " onclick="startSpeedTest()">GO</button>
-            <div class="progress mt-3" style="height: 20px;">
-                <div id="speed-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="container-fluid">
+                <div class="card shadow">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            Speedtest
+                        </h6>
+                    </div>
+                    <div class="card-body text-center">
+                        <button class="btn center btn-primary rounded-circle" style="width: 300px; height: 300px; font-size: 24px;" onclick="startSpeedTest()">GO</button>
+                        <div class="progress mt-3" style="height: 20px;">
+                            <div id="speed-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                        <div class="mt-3">
+                            <p id="download-speed" class="text-primary font-weight-bold">Download: - Mbps</p>
+                            <p id="upload-speed" class="text-success font-weight-bold">Upload: - Mbps</p>
+                            <p id="ping-result" class="text-warning font-weight-bold">Ping: - ms</p>
+   
+                        </div>
+                        <p class="card-text mt-2" id="result">Click the button to test your speed.</p>
+                    </div>
+                </div>
             </div>
-            <p class="card-text mt-2" id="result">Click the button to test your speed.</p>
         </div>
     </div>
 </div>
-</div>
 @endsection
+
 @push('scripts')
-    <script>
-        function startSpeedTest() {
-            const speedBar = document.getElementById('speed-bar');
-            const result = document.getElementById('result');
+<script>
+    function startSpeedTest() {
+        const speedBar = document.getElementById('speed-bar');
+        const result = document.getElementById('result');
+        const downloadSpeed = document.getElementById('download-speed');
+        const uploadSpeed = document.getElementById('upload-speed');
+        const pingElement = document.getElementById('ping-result');
 
-            const simulatedSpeed = Math.random() * 100; 
+        result.textContent = "Testing your internet speed...";
+        downloadSpeed.textContent = "Download: Calculating...";
+        pingElement.textContent = "Ping: Calculating...";
+        uploadSpeed.textContent = "Upload: Calculating...";
+        
 
-            speedBar.style.width = simulatedSpeed + '%';
-            speedBar.setAttribute('aria-valuenow', simulatedSpeed.toFixed(0));
-            result.textContent = `Your speed is ${simulatedSpeed.toFixed(2)} Mbps.`;
-        }
-    </script>
+        setTimeout(() => {
+            const ping = (Math.random() * (100 - 10) + 10).toFixed(0); 
+            const simulatedDownloadSpeed = (Math.random() * (100 - 10) + 10).toFixed(2); 
+            const simulatedUploadSpeed = (Math.random() * (50 - 5) + 5).toFixed(2); 
+
+            speedBar.style.width = simulatedDownloadSpeed + '%';
+            speedBar.setAttribute('aria-valuenow', simulatedDownloadSpeed);
+            downloadSpeed.textContent = `Download: ${simulatedDownloadSpeed} Mbps`;
+            uploadSpeed.textContent = `Upload: ${simulatedUploadSpeed} Mbps`;
+            pingElement.textContent = `Ping: ${ping} ms`;
+            result.textContent = "Speedtest completed.";
+        }, 3000);
+    }
+</script>
 @endpush

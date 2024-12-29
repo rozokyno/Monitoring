@@ -74,7 +74,7 @@
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                                             1
-                                        
+
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -87,6 +87,25 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-xl-3 col-md-6 mb-4">
+                        <div class="card border-left-warning shadow h-100 py-2">
+                            <div class="card-body">
+                                <div class="row no-gutters align-items-center">
+                                    <div class="col mr-2">
+                                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            SPEEDTEST
+                                        </div>
+                                        <div class="h5 mb-0 font-weight-bold text-gray-800 d-flex align-items-center">
+                                            <button class="btn btn-sm btn-primary" onclick="startSpeedtest()">Run Test</button>
+                                            <span id="speedtest-result" class="ml-2">Hasil di sini</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
 
                 <!-- Content Row -->
@@ -138,6 +157,20 @@
 <script>
     const trafficData = [];
     const startTime = new Date("2024-12-24T00:00:00Z");
+    // Logika Speedtest (Dummy - Generate Angka Acak)
+    // Logika Speedtest (Dummy - Generate Angka Acak)
+    function startSpeedtest() {
+        // Referensi elemen hasil
+        const resultElement = document.getElementById('speedtest-result');
+        resultElement.textContent = "Sedang menghitung...";
+
+        setTimeout(() => {
+            // Generate angka acak antara 10 hingga 100 untuk kecepatan Mbps
+            const speedInMbps = (Math.random() * (100 - 10) + 10).toFixed(2);
+            resultElement.textContent = `${speedInMbps} Mbps`;
+        }, 2000); // Simulasi waktu delay 2 detik
+    }
+
 
     // Fungsi untuk menghasilkan data traffic secara dinamis dengan timestamp acak dalam 1 jam
     function generateRandomTrafficData(ip, count) {
@@ -271,7 +304,7 @@
             },
         });
     }
-                    
+
     // Event listener untuk perubahan dropdown IP
     document
         .getElementById("ipSelect")
