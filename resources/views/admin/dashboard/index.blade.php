@@ -338,7 +338,7 @@
                 resultElement.textContent = "Gagal mengambil angka random.";
             });
     }
-
+    populateIPDropdown(trafficData);
     updateDashboardInfo(dashboardData);
     updateChart(trafficData, trafficData[0].ip);
 </script>
