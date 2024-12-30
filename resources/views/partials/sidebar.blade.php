@@ -58,7 +58,7 @@
             <span>Add Users</span></a>
     </li> -->
     <li class="nav-item">
-        <a class="nav-link" href="{{route('admin.dashboard.tables')}}">
+        <a class="nav-link" href="{{url('/tables')}}">
             <img
                 src="assets/icons/table-cells-svgrepo-com.svg"
                 style="width: 20px"

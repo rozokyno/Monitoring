@@ -31,7 +31,7 @@
                                             Total HOST
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            4 Computer
+                                            {{$computers->count()}} Computer
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -44,16 +44,16 @@
 
                     <!-- Earnings (Monthly) Card Example -->
                     <div class="col-xl-3 col-md-6 mb-4">
-                        <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card border-left-{{ $internetStatus == 'Connected' ? 'success' : 'danger' }} shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
                                     <div class="col mr-2 server-status">
                                         <div
-                                            class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            class="text-xs font-weight-bold text-{{ $internetStatus == 'Connected' ? 'success' : 'danger' }} text-uppercase mb-1">
                                             SERVER STATUS
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            Connected
+                                            {{ $internetStatus }}
                                         </div>
                                     </div>
                                     <div class="col-auto">
@@ -73,7 +73,7 @@
                                             TOTAL ADMIN
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                            1
+                                            {{$users->count()}}
 
                                         </div>
                                     </div>
@@ -96,7 +96,7 @@
                                             SPEEDTEST
                                         </div>
                                         <div class="h5 mb-0 font-weight-bold text-gray-800 d-flex align-items-center">
-                                            <button class="btn btn-sm btn-primary" onclick="startSpeedtest()">Run Test</button>
+                                            <button class="btn btn-sm btn-primary" onclick="runSpeedTest()">Run Test</button>
                                             <span id="speedtest-result" class="ml-2">Hasil di sini</span>
                                         </div>
                                     </div>
@@ -104,7 +104,6 @@
                             </div>
                         </div>
                     </div>
-
 
                 </div>
 
@@ -305,6 +304,7 @@
         });
     }
 
+
     // Event listener untuk perubahan dropdown IP
     document
         .getElementById("ipSelect")
@@ -312,10 +312,34 @@
             updateChart(trafficData, event.target.value);
         });
 
+    function runSpeedTest() {
+        const fileUrl = "http://api.mathjs.org/v4/?expr=randomInt(0,101)";
+        const resultElement = document.getElementById('speedtest-result');
 
-    // Inisialisasi
-    populateIPDropdown(trafficData);
+        if (!resultElement) {
+            console.error("Element dengan ID 'speedtest-result' tidak ditemukan.");
+            return;
+        }
+
+        resultElement.textContent = "Sedang menghitung...";
+
+        fetch(fileUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.text();
+            })
+            .then(randomValue => {
+                resultElement.textContent = `${randomValue} MBps`;
+            })
+            .catch(error => {
+                console.error("Pengambilan angka random gagal:", error);
+                resultElement.textContent = "Gagal mengambil angka random.";
+            });
+    }
+
     updateDashboardInfo(dashboardData);
-    updateChart(trafficData, trafficData[0].ip); // Default tampilkan data IP pertama
+    updateChart(trafficData, trafficData[0].ip);
 </script>
 @endpush

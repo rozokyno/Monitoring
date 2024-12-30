@@ -38,43 +38,57 @@
                 cellspacing="0">
                 <thead>
                   <tr>
-                    <th>IP</th>
-                    <th>Delay (ms)</th>
+                    <th>#</th>
+                    <th>Nama Perangkat</th>
+                    <th>Alamat IP</th>
+                    <th>Alamat MAC</th>
                     <th>Status</th>
-                    <th>Timestamp</th>
-                    <th>Bandwidth</th>
+                    <th>Waktu Terhubung</th>
+                    <th>Durasi Koneksi</th>
+                    <th>Bandwidth Digunakan</th>
+                    <th>Pengguna</th>
                   </tr>
                 </thead>
                 <tbody>
+                  @forelse($computers as $computer)
                   <tr>
-                    <td>192.168.1.12</td>
-                    <td>4.32</td>
-                    <td>Normal</td>
-                    <td>2024-12-24 00:05:12</td>
-                    <td>50 Mbps</td>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $computer->nama ?? 'Tidak diketahui' }}</td>
+                    <td>{{ $computer->ip ?? 'Tidak tersedia' }}</td>
+                    <td>{{ $computer->mac ?? 'Tidak tersedia' }}</td>
+                    <td>
+                      <span class="badge bg-{{ $computer->status == 'online' ? 'success' : 'danger' }}">
+                        {{ ucfirst($computer->status) }}
+                      </span>
+                    </td>
+                    <td>{{ $computer->waktu_terhubung ? \Carbon\Carbon::parse($computer->waktu_terhubung)->format('d-m-Y H:i:s') : '-' }}</td>
+                    <td>
+                      @if($computer->waktu_terhubung)
+                      @php
+                      $connectedTime = \Carbon\Carbon::parse($computer->waktu_terhubung);
+                      $now = \Carbon\Carbon::now();
+                      $diffInMinutes = $connectedTime->diffInMinutes($now);
+                      @endphp
+                      @if($diffInMinutes < 60)
+                        {{ $diffInMinutes }} menit
+                        @else
+                        {{ round($diffInMinutes / 60, 1) }} jam
+                        @endif
+                        @else
+                        -
+                        @endif
+                        </td>
+                    <td>{{ $computer->bandwidth ? number_format($computer->bandwidth / (1024 * 1024), 2) . ' MB' : '-' }}</td>
+                    <td>{{ $computer->pengguna ?? '-' }}</td>
                   </tr>
+                  @empty
                   <tr>
-                    <td>192.168.1.15</td>
-                    <td>3.76</td>
-                    <td>Normal</td>
-                    <td>2024-12-24 00:12:45</td>
-                    <td>48 Mbps</td>
+                    <td colspan="11" class="text-center">Tidak ada perangkat yang terhubung.</td>
                   </tr>
-                  <tr>
-                    <td>192.168.1.24</td>
-                    <td>5.02</td>
-                    <td>Loss</td>
-                    <td>2024-12-24 00:18:20</td>
-                    <td>30 Mbps</td>
-                  </tr>
-                  <tr>
-                    <td>192.168.1.26</td>
-                    <td>2.95</td>
-                    <td>Normal</td>
-                    <td>2024-12-24 00:32:10</td>
-                    <td>55 Mbps</td>
-                  </tr>
+                  @endforelse
                 </tbody>
+
+
 
               </table>
             </div>
